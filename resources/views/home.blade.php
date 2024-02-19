@@ -1,30 +1,41 @@
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Welcome to Your Restaurant</title>
+    <!-- Include Tailwind CSS -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+        }
+        .hero {
+            background-image: url('{{ asset('storage/images/resto.jpeg') }}');
+            background-size: cover;
+            background-position: center;
+        }
+    </style>
 </head>
-<body class="flex items-center justify-center h-screen bg-gray-100 dark:bg-gray-900">
 
-    <form class="max-w-md bg-white p-8 rounded-lg shadow-lg">
-        <div class="mb-6">
-            <label for="username" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Your name</label>
-            <input type="text" id="username" class="mt-1 p-2.5 block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:focus:ring-gray-500 dark:focus:border-gray-500" placeholder="Bonnie Green">
+<body class="bg-gray-100">
+    <div class="hero h-screen flex items-center justify-center text-center text-white">
+        <div>
+            <h1 class="text-4xl font-bold mb-4">Welcome to Your Restaurant</h1>
+            <p class="text-lg mb-6">Experience exquisite dining with us</p>
+            <a href="{{ route('login.show') }}"
+                class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded inline-flex items-center transition duration-300 ease-in-out">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M19 9l-7 7-7-7"></path>
+                </svg>
+                Go to Login
+            </a>
         </div>
-        <div class="mb-6">
-            <p class="text-sm text-gray-500 dark:text-gray-400">Username available!</p>
-        </div>
-        <div class="mb-6">
-            <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Password</label>
-            <input type="password" id="password" class="mt-1 p-2.5 block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:focus:ring-gray-500 dark:focus:border-gray-500" placeholder="********">
-        </div>
-        <div class="flex justify-between">
-            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">Submit</button>
-            <a href="{{ route('clients.create') }}" class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 focus:outline-none focus:bg-green-600">Create User</a>
-        </div>
-    </form>
-
+    </div>
 </body>
+
 </html>
