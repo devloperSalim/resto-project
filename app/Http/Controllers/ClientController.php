@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ClientRequest;
 use App\Models\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class ClientController extends Controller
 {
@@ -33,9 +35,14 @@ class ClientController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ClientRequest $request)
     {
-        //
+        $form = $request->validated();
+        $form['password']=Hash::make($request->password);
+        Client::create($form);
+
+        return to_route('login.show');
+
     }
 
     /**

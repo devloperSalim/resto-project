@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginController;
@@ -19,6 +20,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/',[HomeController::class,'home'])->name('homepage');
 
 Route::resource('clients', ClientController::class);
+Route::resource('categories', CategoryController::class);
 Route::get('/login',[LoginController::class,'show'])->name('login.show');
+Route::post('/login',[LoginController::class,'login'])->name('login');
 
 
