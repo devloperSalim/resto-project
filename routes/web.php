@@ -23,5 +23,6 @@ Route::resource('clients', ClientController::class);
 Route::resource('categories', CategoryController::class);
 Route::get('/login',[LoginController::class,'show'])->name('login.show');
 Route::post('/login',[LoginController::class,'login'])->name('login');
+Route::get('/logout',[LoginController::class,'logout'])->name('logout');
 
 

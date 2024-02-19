@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class LoginController extends Controller
 {
@@ -18,10 +19,18 @@ class LoginController extends Controller
         // dd($credentials);
         // dd(Auth::attempt($credentials));
         if(Auth::attempt($credentials)){
-            return view('category.index');
+            return view('gerer.gerer')->with('success','u connected successfoly');;
         }else{
-            return back();
+            return back()->withErrors([
+                'email'=>'email or password not correct'
+            ])->onlyInput('email');
         }
+    }
+
+    public function logout(){
+        Session::flush();
+        Auth::logout();
+        return view('home');
     }
 
 }
