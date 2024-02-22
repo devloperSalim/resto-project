@@ -31,7 +31,7 @@
     <div class="hero h-screen flex items-center justify-center text-center text-white relative">
         <div class="overlay absolute inset-0"></div>
         <div class="relative z-10">
-            <h1 class="text-5xl font-bold mb-6 text-shadow">Welcome to Your Restaurant</h1>
+            <h1 class="text-5xl font-bold mb-6 text-shadow">Welcome to Salim Restaurant</h1>
             <p class="text-lg mb-8 text-gray-300">Indulge in</p>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
                 <div class="p-4 rounded-lg bg-white shadow-md">
