@@ -18,13 +18,13 @@
     </header>
     <div class="flex flex-col items-center mt-8">
         <div class="flex justify-center space-x-12">
-            <a href="#" class="text-center">
+            <a href="{{ route('categories.index') }}" class="text-center">
                 <div class="bg-white rounded-full p-8 shadow-lg">
                     <i class="fas fa-cogs text-5xl text-blue-500"></i>
                 </div>
                 <p class="mt-4 text-xl">Management</p>
             </a>
-            <a href="#" class="text-center">
+            <a href="{{ route('categories.index') }}" class="text-center">
                 <div class="bg-white rounded-full p-8 shadow-lg">
                     <i class="fas fa-credit-card text-5xl text-green-500"></i>
                 </div>
