@@ -10,4 +10,14 @@ class Table extends Model
     use HasFactory;
     protected $fillable = ['name', 'slug', 'status'];
 
+    public function sales(){
+        return $this->belongsToMany(Sales::class);
+    }
+
+    
+    public function getRouteKeyName()
+    {
+        return  'slug';
+    }
+
 }

@@ -80,7 +80,7 @@ class TableController extends Controller
      */
     public function edit(Table $table)
     {
-        //
+        return view('managments.tables.edit',compact('table'));
     }
 
     /**
@@ -91,9 +91,24 @@ class TableController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Table $table)
-    {
-        //
-    }
+{
+    $this->validate($request, [
+        'name' => 'required|min:3',
+        'status' => 'required|in:1,0' // Adjusted validation rule to match select options
+    ]);
+
+    $name = $request->name;
+    $status = $request->status === '1'; // Convert string to boolean
+    $table->update([
+        'name' => $name,
+        'slug' => Str::slug($name),
+        'status' => $status,
+    ]);
+
+    return redirect()->route('tables.index');
+}
+
+
 
     /**
      * Remove the specified resource from storage.
@@ -103,6 +118,8 @@ class TableController extends Controller
      */
     public function destroy(Table $table)
     {
-        //
+        $table->delete();
+        return to_route('tables.index');
+
     }
 }

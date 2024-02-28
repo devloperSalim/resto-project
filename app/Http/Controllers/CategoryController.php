@@ -22,7 +22,7 @@ class CategoryController extends Controller
 
     public function index()
     {
-        $categories = Category::paginate(5);
+        $categories = Category::paginate(2);
         return view('managments.categories.index',compact('categories'));
     }
 

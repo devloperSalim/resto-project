@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SrvantRequest;
 use App\Models\Servant;
 use Illuminate\Http\Request;
 
@@ -12,9 +13,17 @@ class ServantController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+
     public function index()
     {
-        //
+        $servants = Servant::paginate(2);
+        return view('managments.servants.index',compact('servants'));
     }
 
     /**
@@ -24,7 +33,7 @@ class ServantController extends Controller
      */
     public function create()
     {
-        //
+        return view('managments.servants.create');
     }
 
     /**
@@ -33,9 +42,11 @@ class ServantController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(SrvantRequest $request)
     {
-        //
+        $formField = $request->validated();
+        Servant::create($formField);
+        return redirect()->route('servants.index');
     }
 
     /**
@@ -57,7 +68,7 @@ class ServantController extends Controller
      */
     public function edit(Servant $servant)
     {
-        //
+        return view('managments.servants.edit',compact('servant'));
     }
 
     /**
@@ -67,9 +78,11 @@ class ServantController extends Controller
      * @param  \App\Models\Servant  $servant
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Servant $servant)
+    public function update(SrvantRequest $request, Servant $servant)
     {
-        //
+        $formField = $request->validated();
+        $servant->fill($formField)->save();
+        return redirect()->route('servants.index');
     }
 
     /**
@@ -80,6 +93,7 @@ class ServantController extends Controller
      */
     public function destroy(Servant $servant)
     {
-        //
+        $servant->delete();
+        return redirect()->route('servants.index');
     }
 }
