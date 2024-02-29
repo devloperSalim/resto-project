@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Menu;
+use App\Models\Category;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Http\Requests\MenuReuest;
+use Illuminate\Support\Facades\Storage;
 
 class MenuController extends Controller
 {
@@ -12,9 +16,14 @@ class MenuController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function index()
     {
-        //
+        $menus =Menu::paginate(3);
+        return view('managments.menus.index',compact('menus'));
     }
 
     /**
@@ -24,7 +33,8 @@ class MenuController extends Controller
      */
     public function create()
     {
-        //
+        $categories = Category::all();
+        return view('managments.menus.create',compact('categories'));
     }
 
     /**
@@ -33,9 +43,20 @@ class MenuController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(MenuReuest $request)
     {
-        //
+        $formField=$request->validated();
+        // dd($formField);
+        if ($request->hasFile('image')) {
+            $formField['image'] = $request->file('image')->store('images/menus', 'public');
+        }
+        $title = $request->input('title'); // Retrieve title from request
+        $formField['slug'] = Str::slug($title); // Generate slug from the title
+
+        Menu::create($formField);
+        return to_route('menus.index');
+
+
     }
 
     /**
@@ -57,7 +78,8 @@ class MenuController extends Controller
      */
     public function edit(Menu $menu)
     {
-        //
+        $categories=Category::all();
+        return view('managments.menus.edit',compact('categories','menu'));
     }
 
     /**
@@ -67,10 +89,28 @@ class MenuController extends Controller
      * @param  \App\Models\Menu  $menu
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Menu $menu)
-    {
-        //
+
+public function update(MenuReuest $request, Menu $menu)
+{
+    $formField = $request->validated();
+
+    if ($request->hasFile('image')) {
+        $imagePath = $request->file('image')->store('images/menus', 'public');
+        // Delete old image if it exists
+        if ($menu->image) {
+            Storage::disk('public')->delete($menu->image);
+        }
+        $formField['image'] = $imagePath;
     }
+
+    $title = $request->title;
+    $formField['slug'] = Str::slug($title);
+
+    $menu->fill($formField)->save();
+
+    return redirect()->route('menus.index');
+    // ->with('success', 'Menu item updated successfully.')
+}
 
     /**
      * Remove the specified resource from storage.
@@ -80,6 +120,7 @@ class MenuController extends Controller
      */
     public function destroy(Menu $menu)
     {
-        //
+        $menu->delete();
+        return to_route('menus.index');
     }
 }
