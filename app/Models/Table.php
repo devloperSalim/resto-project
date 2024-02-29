@@ -11,10 +11,10 @@ class Table extends Model
     protected $fillable = ['name', 'slug', 'status'];
 
     public function sales(){
-        return $this->belongsToMany(Sales::class);
+        return $this->belongsToMany(Sales::class);//wahd table i9dar ikon fiha wahd ola bzaf les menu
     }
 
-    
+
     public function getRouteKeyName()
     {
         return  'slug';
