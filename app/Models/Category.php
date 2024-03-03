@@ -9,7 +9,7 @@ class Category extends Model
 {
     use HasFactory;
     protected $fillable = ['title','slug'];
-    public function menu()
+    public function menus()
     {
         return $this->hasMany(Menu::class); // hadi kat3ni kola category 3andha bzaf dyal menu
     }

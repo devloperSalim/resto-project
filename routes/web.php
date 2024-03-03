@@ -5,6 +5,8 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\SalesController;
 use App\Http\Controllers\ServantController;
 use App\Http\Controllers\TableController;
 use Illuminate\Support\Facades\Route;
@@ -27,6 +29,9 @@ Route::resource('categories', CategoryController::class);
 Route::resource('tables', TableController::class);
 Route::resource('servants',ServantController::class);
 Route::resource('menus',MenuController::class);
+Route::resource('sales',SalesController::class);
+
+Route::get('payments',[PaymentController::class,'index'])->name('payments');
 Route::get('/login',[LoginController::class,'show'])->name('login.show');
 Route::post('/login',[LoginController::class,'login'])->name('login');
 Route::get('/logout',[LoginController::class,'logout'])->name('logout');

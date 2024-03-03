@@ -90,10 +90,17 @@ class MenuController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-public function update(MenuReuest $request, Menu $menu)
+public function update(Request $request, Menu $menu)
 {
-    $formField = $request->validated();
+    // $formField = $request->validated();
 
+    $formField = $request->validate([
+        'title' => 'required|min:5|unique:menus,title,'.$menu->id,
+        'description' => 'required|min:5',
+        'image' => 'image|mimes:png,jpg,jpeg|max:10250',
+        'price' => 'required|numeric',
+        'category_id' => 'required|numeric'
+    ]);
     if ($request->hasFile('image')) {
         $imagePath = $request->file('image')->store('images/menus', 'public');
         // Delete old image if it exists

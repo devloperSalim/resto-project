@@ -23,10 +23,10 @@ class MenuReuest extends FormRequest
      */
     public function rules()
     {
-        $menuId = $this->route('menu')->id;
+        // $menuId = $this->route('menus')->id;
 
         return [
-            'title' => 'required|min:5|unique:menus,title,' . $menuId,
+            'title' => 'required|min:5|unique:menus,title,',
             'description' => 'required|min:5',
             'image' => 'image|mimes:png,jpg,jpeg|max:10250',
             'price' => 'required|numeric',

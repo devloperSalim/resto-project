@@ -124,6 +124,10 @@
                     <div class="mb-4">
                         <label for="image" class="block text-gray-700 text-sm font-bold mb-2">Image</label>
                         <input type="file" name="image" id="image" class="appearance-none block w-full bg-white text-gray-700 border border-gray-300 rounded py-2 px-3 leading-tight focus:outline-none focus:shadow-outline">
+                        @error('image')
+                        {{ $message }}
+                    @enderror
+
                     </div>
 
                     <div class="mb-4">

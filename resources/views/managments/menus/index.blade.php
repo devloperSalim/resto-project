@@ -112,12 +112,12 @@
                 <td class="border border-gray-200 px-4 py-2">{{ $menu->title }}</td>
                 <td class="border border-gray-200 px-4 py-2">
                     @if($menu->image)
-                        <img src="{{ asset('storage/' . $menu->image) }}" class="w-16 h-16 object-cover rounded-full" alt="Menu Image">
+                    <img src="{{ asset('storage/' . $menu->image) }}" class="w-24 h-24 object-cover" alt="Menu Image">
                     @else
                         <span>No Image Available</span>
                     @endif
                 </td>
-                <td class="border border-gray-200 px-4 py-2">{{ $menu->Category->title }}</td>
+                <td class="border border-gray-200 px-4 py-2">{{ $menu->category->title }}</td>
                 <td class="border border-gray-200 px-4 py-2">{{ Str::limit($menu->description, 60, '...') }}</td>
                 <td class="border border-gray-200 px-4 py-2">${{ $menu->price }}
                     <i class="fas fa-dollar-sign"></i>
