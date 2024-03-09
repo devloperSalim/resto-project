@@ -156,42 +156,81 @@
             display: block;
         }
 
-        .menu-image {
-            width: 100%;
-            height: auto;
-            border-radius: 10px 10px 0 0;
-        }
+        .sale-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    width: 250px; /* Adjust the width as needed */
+}
 
-        .menu-details {
-            padding: 20px;
-        }
+.sale-details {
+    width: 100%;
+}
 
-        .menu-title {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-            color: #333;
-        }
+.title {
+    font-size: 20px;
+    margin-bottom: 5px;
+    text-align: center;
+}
 
-        .menu-actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 20px;
-        }
+.menu-image {
+    border-radius: 50%;
+    margin-right: 5px;
+}
 
-        .menu-actions a {
-            color: #333;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
+.menu-info {
+    display: flex;
+    align-items: center;
+}
 
-        .menu-actions a:hover {
-            color: #111;
-        }
+.menu-title {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 3px;
+}
 
-        .menu-actions .form-checkbox {
-            margin-right: 5px;
-        }
+.menu-price {
+    font-size: 12px;
+    color: #888;
+}
+
+.sale-actions {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 5px;
+}
+
+.action-btn {
+    padding: 5px 10px;
+    margin-left: 5px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.modify-btn {
+    background-color: #ffc107;
+}
+
+.print-btn {
+    background-color: #28a745;
+}
+.restaurant-info {
+    font-size: 14px;
+    color: #555;
+}
+
+
+
         /* Hide all tab contents */
         .tab-content {
             display: none;
@@ -213,6 +252,8 @@
         <p class="current-date">Current Date and Time: {{ \Carbon\Carbon::now()->format('Y-m-d H:i:s') }}</p>
         <form action="{{ route('sales.store') }}" method="post">
             @csrf
+
+            <!-- Table selection section -->
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
                 @foreach ($tables as $table)
                     <div class="table-card bg-white rounded-lg shadow-md overflow-hidden">
@@ -226,10 +267,53 @@
                             <a href="#" class="edit-icon"><i class="fas fa-edit"></i></a>
                             <!-- Keep edit icon small -->
                         </div>
+                        <hr>
+                        @foreach ($table->sales as $sale)
+                            @if ($sale->created_at >= Carbon\Carbon::today())
+                                <div class="sale-card">
+                                    <div class="sale-details">
+                                        <h2 class="title">Sale Details</h2>
+                                        <ul>
+                                            @foreach ($sale->menus()->where('sales_id', $sale->id)->get() as $menu)
+                                                <li>
+                                                    <img src="{{ asset('storage/' . $menu->image) }}" alt="{{ $menu->title }}" class="menu-image" width="100" height="100">
+                                                    <div class="menu-info">
+                                                        <strong class="menu-title">{{ $menu->title }}</strong>
+                                                        <span class="menu-price">{{ $menu->price }} HD</span>
+                                                    </div>
+                                                </li>
+                                            @endforeach
+                                            <li><strong>Servant:</strong> {{ $sale->servant->name }}</li>
+                                            <li><strong>Quantity:</strong> {{ $sale->quantity }}</li>
+                                            <li><strong>Total Price:</strong> {{ $sale->total_price }}</li>
+                                            <li><strong>Total Received:</strong> {{ $sale->total_received }}</li>
+                                            <li><strong>Change:</strong> {{ $sale->change }}</li>
+                                            <li><strong>Payment Type:</strong> {{ $sale->payment_type === 'cash' ? 'Cash' : 'Credit Card' }}</li>
+                                            <li><strong>Payment Status:</strong> {{ $sale->payment_status }}</li>
+                                            <hr>
+                                            <li class="restaurant-info">Salim Resto</li>
+                                            <li class="restaurant-info">rue de lmdyoriya</li>
+                                            <li class="restaurant-info">0123456789</li>
+
+                                        </ul>
+                                    </div>
+                                    <div class="sale-actions">
+                                        <button class="action-btn modify-btn">Modify</button>
+                                        <button class="action-btn print-btn">Print</button>
+                                    </div>
+                                </div>
+                            @endif
+                        @endforeach
+
+
+
+
+
                     </div>
                 @endforeach
             </div>
 
+            <!-- Category and menu selection section -->
             <div class="container flex flex-col items-center justify-center">
                 <ul id="pills-tabs" role="tablist" class="flex mb-8">
                     @foreach($categories as $category)
@@ -265,26 +349,57 @@
                 </div>
             </div>
 
-            </form>
+            <!-- Other input fields for quantity, total_price, total_received, change, payment_type, and payment_status -->
+            <div class="w-full md:w-1/2 lg:w-1/3 mx-auto p-4">
+                <label for="servant_id" class="block text-gray-700">Select Servant</label>
+                <select name="servant_id" id="servant_id" class="block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400">
+                    @foreach ($servants as $servant)
+                        <option value="{{ $servant->id }}">{{ $servant->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="w-full md:w-1/2 lg:w-1/3 mx-auto p-4">
+                <label for="quantity" class="block text-gray-700">Quantity</label>
+                <input type="text" name="quantity" id="quantity" class="block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400">
+            </div>
+            <div class="w-full md:w-1/2 lg:w-1/3 mx-auto p-4">
+                <label for="total_price" class="block text-gray-700">Total Price</label>
+                <input type="text" name="total_price" id="total_price" class="block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400">
+            </div>
+            <div class="w-full md:w-1/2 lg:w-1/3 mx-auto p-4">
+                <label for="total_received" class="block text-gray-700">Total Received</label>
+                <input type="text" name="total_received" id="total_received" class="block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400">
+            </div>
+            <div class="w-full md:w-1/2 lg:w-1/3 mx-auto p-4">
+                <label for="change" class="block text-gray-700">Change</label>
+                <input type="text" name="change" id="change" class="block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400">
+            </div>
+            <div class="w-full md:w-1/2 lg:w-1/3 mx-auto p-4">
+                <select name="payment_type" class="block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400">
+                    <option value="" disabled selected>Payment Type</option>
+                    <option value="cash">Cash</option>
+                    <option value="card">Credit Card</option>
+                </select>
+            </div>
+            <div class="w-full md:w-1/2 lg:w-1/3 mx-auto p-4">
+                <select name="payment_status" class="block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400">
+                    <option value="" disabled selected>Payment Status</option>
+                    <option value="paid">Paid</option>
+                    <option value="unpaid">Unpaid</option>
+                </select>
+            </div>
+
+            <!-- Submit button -->
+            <div class="text-center p-4">
+                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Add</button>
+            </div>
+        </form>
+
             </div>
 
 
 
-        {{--  <script>
-            function showTabContent(tabId) {
-                // Hide all tab contents
-                var tabContents = document.querySelectorAll('.tab-content');
-                tabContents.forEach(function(content) {
-                    content.classList.remove('active');
-                });
-
-                // Show the selected tab content
-                var selectedTabContent = document.getElementById(tabId);
-                if (selectedTabContent) {
-                    selectedTabContent.classList.add('active');
-                }
-            }
-        </script>  --}}
 
 </body>
 

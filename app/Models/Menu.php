@@ -18,7 +18,7 @@ class Menu extends Model
 
     public function sales(){
 
-        return $this->belongsTo(Sales::class);//wahd lmenu tkon tab3a lbzaf dyal les table
+        return $this->belongsTo(Sales::class);//wahd lmenu tkon tab3a lbzaf dyal les bi3a
 
     }
 
