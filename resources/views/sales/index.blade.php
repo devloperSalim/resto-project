@@ -59,12 +59,12 @@
                 </a>
 
                 {{--   Menu  --}}
-                <a href="" class="py-4 px-6 w-full flex items-center justify-between hover:bg-gray-800 transition-colors">
+                <a href="{{ route('menus.index') }}" class="py-4 px-6 w-full flex items-center justify-between hover:bg-gray-800 transition-colors">
                     <span>Menu</span>
                     <i class="fas fa-utensils"></i>
                 </a>
                 {{--  sales  --}}
-                <a href="" class="py-4 px-6 w-full flex items-center justify-between hover:bg-gray-800 transition-colors">
+                <a href="{{ route('sales.index') }}" class="py-4 px-6 w-full flex items-center justify-between hover:bg-gray-800 transition-colors">
                     <span>Sales</span>
                     <i class="fas fa-chart-line"></i>
                 </a>
@@ -83,9 +83,9 @@
             <!-- Content here -->
             <header class="bg-white p-4 flex justify-between items-center shadow-md">
                 <h1 class="text-2xl font-bold flex items-center">
-                    <i class="fas fa-utensils"></i> Menus
+                    <i class="fas fa-utensils"></i> Sales
                 </h1>
-                <a href="{{ route('menus.create') }}" class="text-gray-600 hover:text-gray-900">
+                <a href="{{ route('payments') }}" class="text-gray-600 hover:text-gray-900">
                     <i class="fas fa-plus-circle text-2xl"></i>
                 </a>
             </header>
@@ -97,42 +97,64 @@
         <thead>
             <tr>
                 <th class="border border-gray-200 px-4 py-2">Id</th>
-                <th class="border border-gray-200 px-4 py-2">Title</th>
-                <th class="border border-gray-200 px-4 py-2">Image</th>
-                <th class="border border-gray-200 px-4 py-2">Category</th>
-                <th class="border border-gray-200 px-4 py-2">Description</th>
-                <th class="border border-gray-200 px-4 py-2">Price</th>
-                <th class="border border-gray-200 px-4 py-2">Actions</th>
+                <th class="border border-gray-200 px-4 py-2">Menu</th>
+                <th class="border border-gray-200 px-4 py-2">Tables</th>
+                <th class="border border-gray-200 px-4 py-2">Servant</th>
+                <th class="border border-gray-200 px-4 py-2">Quantity</th>
+                <th class="border border-gray-200 px-4 py-2">Total</th>
+                <th class="border border-gray-200 px-4 py-2">Type of Payments</th>
+                <th class="border border-gray-200 px-4 py-2">Action</th>
             </tr>
         </thead>
         <tbody>
-            @foreach($menus as $key => $menu)
+            @foreach($sales as $key => $sale)
             <tr>
-                <td class="border border-gray-200 px-4 py-2">{{ $key +1 }}</td>
-                <td class="border border-gray-200 px-4 py-2">{{ $menu->title }}</td>
+                <td class="border border-gray-200 px-4 py-2">{{ $key + 1 }}</td>
                 <td class="border border-gray-200 px-4 py-2">
-                    @if($menu->image)
-                    <img src="{{ asset('storage/' . $menu->image) }}" class="w-24 h-24 object-cover" alt="Menu Image">
-                    @else
-                        <span>No Image Available</span>
-                    @endif
+                    @foreach ($sale->menus()->where('sales_id', $sale->id)->get() as $menu)
+                        <div class="flex flex-col items-center">
+                            @if ($menu->image)
+                                <img src="{{ asset('storage/' . $menu->image) }}" class="w-10 h-10 object-cover rounded-full" alt="Menu Image">
+                            @else
+                                <div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
+                                    <span class="text-gray-400">No Image</span>
+                                </div>
+                            @endif
+                            <div class="text-gray-800 font-semibold">{{ $menu->title }}</div>
+                            <div class="text-gray-600">{{ $menu->price }} HD</div>
+                        </div>
+                    @endforeach
                 </td>
-                <td class="border border-gray-200 px-4 py-2">{{ $menu->category->title }}</td>
-                <td class="border border-gray-200 px-4 py-2">{{ Str::limit($menu->description, 60, '...') }}</td>
-                <td class="border border-gray-200 px-4 py-2">${{ $menu->price }}
-                    <i class="fas fa-dollar-sign"></i>
+
+                <td class="border border-gray-200 px-4 py-2">
+                    @foreach ($sale->tables()->where('sales_id', $sale->id)->get() as $table)
+                        <div class="flex items-center">
+                            <i class="fas fa-chair mr-2"></i>
+                            <span>{{ $table->name }}</span>
+                        </div>
+                    @endforeach
                 </td>
+
+                <td class="border border-gray-200 px-4 py-2">
+                    <span class="flex items-center">
+                        <i class="fas fa-user mr-1 text-gray-500"></i>
+                        {{ $sale->servant->name }}
+                    </span>
+                </td>
+                <td class="border border-gray-200 px-4 py-2">{{ $sale->quantity }}</td>
+                <td class="border border-gray-200 px-4 py-2">{{ $sale->total_price }}</td>
+                <td class="border border-gray-200 px-4 py-2">{{ $sale->payment_status }}</td>
                 <td class="border border-gray-200 px-4 py-2 flex space-x-2">
-                    <a href="{{ route('menus.edit',$menu->slug) }}" class="text-green-500 hover:text-green-700 flex items-center">
+                    <a href="{{ route('sales.edit',$sale->id) }}" class="text-green-500 hover:text-green-700 flex items-center">
                         <i class="fas fa-edit"></i>
                         <span class="ml-1">Edit</span>
                     </a>
-                    <button onclick="openDeleteModal('{{ $menu->slug }}')" class="text-red-500 hover:text-red-700 flex items-center">
+                    <button onclick="openDeleteModal('{{ $sale->id }}')" class="text-red-500 hover:text-red-700 flex items-center">
                         <i class="fas fa-trash-alt"></i>
                         <span class="ml-1">Delete</span>
                     </button>
                     <!-- Delete Confirmation Modal -->
-                    <div id="deleteModal{{ $menu->slug}}" class="fixed z-50 inset-0 overflow-y-auto hidden">
+                    <div id="deleteModal{{ $sale->id }}" class="fixed z-50 inset-0 overflow-y-auto hidden">
                         <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
                             <div class="fixed inset-0 transition-opacity" aria-hidden="true">
                                 <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
@@ -157,7 +179,7 @@
                                 </div>
                                 <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                                     <!-- Delete button -->
-                                    <form id="deleteForm{{ $menu->slug}}" method="POST" action="{{ route('menus.destroy', $menu->slug ) }}">
+                                    <form id="deleteForm{{ $sale->id  }}" method="POST" action="{{ route('sales.destroy', $sale->id ) }}">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">
@@ -165,7 +187,7 @@
                                         </button>
                                     </form>
                                     <!-- Cancel button -->
-                                    <button onclick="closeDeleteModal('{{ $menu->slug  }}')" type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                                    <button onclick="closeDeleteModal('{{ $sale->id  }}')" type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
                                         Cancel
                                     </button>
                                 </div>
@@ -177,22 +199,23 @@
             @endforeach
         </tbody>
     </table>
+
 </div>
             <div class="mt-4">
-                {{ $menus->links() }}
+                {{ $sales->links() }}
             </div>
         </section>
     </main>
 
     <script>
         // Function to show the delete modal
-        function openDeleteModal(slug) {
-            document.getElementById('deleteModal' + slug).classList.remove('hidden');
+        function openDeleteModal(id) {
+            document.getElementById('deleteModal' + id).classList.remove('hidden');
         }
 
         // Function to close the delete modal
-        function closeDeleteModal(slug) {
-            document.getElementById('deleteModal' + slug).classList.add('hidden');
+        function closeDeleteModal(id) {
+            document.getElementById('deleteModal' + id).classList.add('hidden');
         }
     </script>
 </body>

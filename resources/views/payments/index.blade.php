@@ -28,18 +28,16 @@
             margin-bottom: 20px;
         }
 
-        .return-home-icon {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            color: #4a5568;
-            transition: color 0.3s;
+        .return-home-link {
+            display: inline-block;
+            color: #6cb2eb;
+            text-decoration: none;
+            margin-bottom: 20px;
         }
 
-        .return-home-icon:hover {
-            color: #1a202c;
+        .return-home-link:hover {
+            color: #4f90c7;
         }
-
         .show-all-btn {
             position: absolute;
             top: 20px;
@@ -245,7 +243,7 @@
 </head>
 
 <body>
-    <a href="#" class="return-home-icon"><i class="fas fa-arrow-left"></i></a>
+    <a href="{{ route('menus.index') }}" class="return-home-link"><i class="fas fa-arrow-left"></i> Back to </a>
     <div class="container">
         <h1 class="dashboard-title">Dashboard</h1>
         <a href="#" class="show-all-btn">Show All</a>
@@ -264,13 +262,16 @@
                         <div class="table-actions bg-gray-100 px-6 py-3 flex justify-between items-center">
                             <input type="checkbox" id="{{ $table->id }}" name="table_id[]" value="{{ $table->id }}"
                                 class="form-checkbox h-5 w-5 text-indigo-600">
-                            <a href="#" class="edit-icon"><i class="fas fa-edit"></i></a>
+                            <a href="{{ route('tables.edit',$table->slug) }}" class="edit-icon"><i class="fas fa-edit"></i></a>
                             <!-- Keep edit icon small -->
                         </div>
+
+
+                        {{-- fiche --}}
                         <hr>
                         @foreach ($table->sales as $sale)
                             @if ($sale->created_at >= Carbon\Carbon::today())
-                                <div class="sale-card">
+                                <div class="sale-card" id="{{ $sale->id }}">
                                     <div class="sale-details">
                                         <h2 class="title">Sale Details</h2>
                                         <ul>
@@ -298,16 +299,12 @@
                                         </ul>
                                     </div>
                                     <div class="sale-actions">
-                                        <button class="action-btn modify-btn">Modify</button>
-                                        <button class="action-btn print-btn">Print</button>
+                                        <a href="{{ route('sales.edit',$sale->id) }}"  class="action-btn modify-btn">Modify</a>
+                                        <button onclick="printContent('{{ $sale->id }}')" class="action-btn print-btn">Print</button>
                                     </div>
                                 </div>
                             @endif
                         @endforeach
-
-
-
-
 
                     </div>
                 @endforeach
@@ -398,7 +395,24 @@
 
             </div>
 
-
+            <script>
+                function printContent(elId) {
+                    const pageContent = document.body.innerHTML;
+                    const contentToPrint = document.getElementById(elId).innerHTML;
+                    const printWindow = window.open('', '_blank');
+                    printWindow.document.write('<html><head><title>Print</title>');
+                    printWindow.document.write('<style>@media print { img { max-width: 100%; } }</style>'); // Ensure images fit on page
+                    printWindow.document.write('</head><body>');
+                    printWindow.document.write(contentToPrint);
+                    printWindow.document.write('</body></html>');
+                    printWindow.document.close();
+                    // Wait for images to load before printing
+                    printWindow.onload = function() {
+                        printWindow.print();
+                        printWindow.document.body.innerHTML = pageContent;
+                    };
+                }
+            </script>
 
 
 </body>
