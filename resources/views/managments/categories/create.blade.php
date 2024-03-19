@@ -60,12 +60,12 @@
                 </a>
 
                 {{--   Menu  --}}
-                <a href="" class="py-4 px-6 w-full flex items-center justify-between hover:bg-gray-800 transition-colors">
+                <a href="{{ route('categories.index') }}" class="py-4 px-6 w-full flex items-center justify-between hover:bg-gray-800 transition-colors">
                     <span>Menu</span>
                     <i class="fas fa-utensils"></i>
                 </a>
                 {{--  sales  --}}
-                <a href="" class="py-4 px-6 w-full flex items-center justify-between hover:bg-gray-800 transition-colors">
+                <a href="{{ route('sales.index') }}" class="py-4 px-6 w-full flex items-center justify-between hover:bg-gray-800 transition-colors">
                     <span>Sales</span>
                     <i class="fas fa-chart-line"></i>
                 </a>

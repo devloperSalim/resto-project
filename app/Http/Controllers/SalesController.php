@@ -16,7 +16,7 @@ class SalesController extends Controller
     public function index()
     {
 
-        $sales = Sales::orderBy('created_at', 'DESC')->paginate(3);//ASC
+        $sales = Sales::orderBy('created_at', 'DESC')->paginate(2);//ASC
 
         return view('sales.index',compact('sales'));
     }

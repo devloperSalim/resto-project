@@ -24,13 +24,13 @@
                 </div>
                 <p class="mt-4 text-xl">Management</p>
             </a>
-            <a href="{{ route('categories.index') }}" class="text-center">
+            <a href="{{ route('sales.index') }}" class="text-center">
                 <div class="bg-white rounded-full p-8 shadow-lg">
                     <i class="fas fa-credit-card text-5xl text-green-500"></i>
                 </div>
                 <p class="mt-4 text-xl">Sales</p>
             </a>
-            <a href="#" class="text-center">
+            <a href="{{ route('reports.index') }}" class="text-center">
                 <div class="bg-white rounded-full p-8 shadow-lg">
                     <i class="fas fa-file-alt text-5xl text-yellow-500"></i>
                 </div>
